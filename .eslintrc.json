@@ -1,0 +1,78 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks",
+    "react-refresh"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    // 콘솔 로그 경고 (개발 중에는 허용)
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+
+    // 사용하지 않는 변수 경고
+    "@typescript-eslint/no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
+
+    // any 타입 사용 경고
+    "@typescript-eslint/no-explicit-any": "warn",
+
+    // React import 자동 처리 (React 17+)
+    "react/react-in-jsx-scope": "off",
+
+    // Props validation 경고
+    "react/prop-types": "off",
+
+    // React Hooks 규칙
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+
+    // 빈 함수 경고
+    "@typescript-eslint/no-empty-function": "warn",
+
+    // 세미콜론 규칙 (Prettier와 일치)
+    "semi": "off",
+    "@typescript-eslint/semi": "off",
+
+    // 사용하지 않는 import 경고
+    "@typescript-eslint/no-unused-imports": "off",
+
+    // require 허용
+    "@typescript-eslint/no-var-requires": "off",
+
+    // non-null assertion 허용
+    "@typescript-eslint/no-non-null-assertion": "warn"
+  },
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "*.config.js",
+    "*.config.ts"
+  ]
+}

@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build
+# dist/
+# build/
+
+# Environment variables
+.env
+.env.*
+*.local
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Cache
+.cache/
+
+# IDE
+.vscode/
+.idea/
+
+# Personal docs
+hanbeen_docs/
+
+# Vite temp
+vite.config.ts.timestamp-*

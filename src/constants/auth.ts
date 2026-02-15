@@ -1,0 +1,5 @@
+export const AUTH_STORAGE_KEY = "pulse-safety-auth"
+export const SAVED_LOGIN_ID_KEY = "pulse-safety-login-id"
+export const LOGOUT_ALERT_KEY = "pulse-safety-logout-alert"
+export const AUTO_LOGIN_TOAST_KEY = "pulse-safety-auto-login-toast"
+export const SESSION_BOOTSTRAP_KEY = "pulse-safety-session-bootstrapped"
