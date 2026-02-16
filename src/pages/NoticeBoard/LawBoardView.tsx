@@ -14,7 +14,7 @@ type FormDataState = {
 type Props = {
   isOpen: boolean
   onClose: () => void
-  initialData?: { id?: number | string; title?: string; organization?: string; date?: string; content?: string; fileAttach?: boolean } | null
+  initialData?: { id?: number | string; title?: string; organization?: string; date?: string; content?: string; fileAttach?: boolean; link?: string } | null
 }
 
 export default function LawBoardView({ isOpen, onClose, initialData = null }: Props): React.ReactElement | null {
@@ -94,7 +94,12 @@ export default function LawBoardView({ isOpen, onClose, initialData = null }: Pr
       <div className="bg-white rounded-2xl w-[800px] max-w-[95vw] p-8 shadow-2xl max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <h2 className="text-xl font-semibold tracking-wide mb-3">중대재해처벌법</h2>
         <FormScreen fields={fields} values={valuesForForm} onChange={() => {}} onClose={onClose} onSave={() => {}} isModal />
-        <div className="mt-6 flex justify-center gap-1">
+        <div className="mt-6 flex justify-center gap-2">
+          {initialData?.link && (
+            <Button variant="primary" onClick={() => window.open(initialData.link!, '_blank')}>
+              법령 원문 보기
+            </Button>
+          )}
           <Button variant="primaryOutline" onClick={onClose}>
             닫기
           </Button>

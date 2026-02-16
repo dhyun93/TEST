@@ -5,6 +5,7 @@ import { Trash2, Plus, Send, Users, X } from "lucide-react"
 import useHandlers from "@/hooks/useHandlers"
 import { attendeeMockData, attendeeGroupMockData } from "@/data/mockBusinessData"
 import { formatPhoneNumber } from "@/utils/phone"
+import { sendNotification, ALARM_CATEGORY } from "@/api/15_Notification/notification.api"
 
 interface Attendee {
   name: string
@@ -114,9 +115,34 @@ export default function AttendeePanel({ attendees, onAdd, onRemove, onAddMultipl
     else onRemove(idx)
   }
 
-  const handleSendClick = () => {
-    alert("전송 방식 미정 ::: 결정 후 공유/적용 예정") //[TODO]:카톡/앱푸시 방식 고려중이라고하심
-    // handleSendNotification(currentList.length)
+  const [sending, setSending] = useState(false)
+
+  const handleSendClick = async () => {
+    if (currentList.length === 0) {
+      alert("전송할 참석자가 없습니다.")
+      return
+    }
+    if (!window.confirm(`${currentList.length}명에게 알림을 전송하시겠습니까?`)) return
+
+    setSending(true)
+    try {
+      const phones = currentList.map(a => a.phone.replace(/-/g, ""))
+      const result = await sendNotification({
+        title: "참석 안내",
+        contents: `참석 알림이 발송되었습니다. (${currentList.length}명)`,
+        category: ALARM_CATEGORY.EDUCATION,
+        phones,
+      })
+      if (result.ok) {
+        alert(`알림 전송 완료 (${result.sent}/${result.total}명)`)
+      } else {
+        alert(result.msg || "전송에 실패했습니다.")
+      }
+    } catch {
+      alert("알림 전송 중 오류가 발생했습니다.")
+    } finally {
+      setSending(false)
+    }
   }
 
   const columns: Column[] = [
@@ -196,9 +222,9 @@ export default function AttendeePanel({ attendees, onAdd, onRemove, onAddMultipl
           />
           {data.length === 0 && <div className={`w-full text-center text-gray-400 mt-6 ${TEXT_SIZE} select-none`}>등록된 참석자가 없습니다</div>}
           <div className="flex justify-end mt-3 md:mt-4">
-            <Button variant="action" onClick={handleSendClick} className={`h-8 md:h-10 ${TEXT_SIZE} flex items-center gap-1`}>
+            <Button variant="action" onClick={handleSendClick} disabled={sending} className={`h-8 md:h-10 ${TEXT_SIZE} flex items-center gap-1`}>
               <Send size={16} className="md:w-[18px] md:h-[18px]" />
-              전송하기
+              {sending ? "전송 중..." : "전송하기"}
             </Button>
           </div>
         </div>

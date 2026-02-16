@@ -1,11 +1,12 @@
 /**
  * 프로젝트 전역 Enum 타입 정의
  * 백엔드 API 응답 코드값을 TypeScript Enum으로 매핑
+ * 백엔드 모델: posts/models.py 기준 확정
  */
 
 /**
  * 점검 타입
- * TODO: 백엔드 API 스펙 확정 필요
+ * 백엔드: InspectionSchedule.type, Inspection.type
  */
 export enum InspectionType {
   REGULAR = 0,        // 정기점검
@@ -25,25 +26,23 @@ export const InspectionTypeLabels: Record<InspectionType, string> = {
 
 /**
  * 점검 결과
- * TODO: 백엔드 API 스펙 확정 필요
+ * 백엔드: Inspection.result (0=이상없음, 1=주의, 2=위험)
  */
 export enum InspectionResult {
-  GOOD = 0,           // 양호
-  POOR = 1,           // 불량
-  IMPROVEMENT = 2,    // 개선필요
-  NOT_APPLICABLE = 3, // 해당없음
+  NO_ISSUE = 0,       // 이상없음
+  CAUTION = 1,        // 주의
+  DANGER = 2,         // 위험
 }
 
 export const InspectionResultLabels: Record<InspectionResult, string> = {
-  [InspectionResult.GOOD]: '양호',
-  [InspectionResult.POOR]: '불량',
-  [InspectionResult.IMPROVEMENT]: '개선필요',
-  [InspectionResult.NOT_APPLICABLE]: '해당없음',
+  [InspectionResult.NO_ISSUE]: '이상없음',
+  [InspectionResult.CAUTION]: '주의',
+  [InspectionResult.DANGER]: '위험',
 }
 
 /**
  * 협력사 평가 타입
- * TODO: 백엔드 API 스펙 확정 필요
+ * 백엔드: SafetyAssessment.type
  */
 export enum EvaluationType {
   SELECTION = 0,      // 선정평가
@@ -63,7 +62,7 @@ export const EvaluationTypeLabels: Record<EvaluationType, string> = {
 
 /**
  * 현장점검 타입 (협력사)
- * TODO: 백엔드 API 스펙 확정 필요
+ * 백엔드: Inspection.type (협력사 현장점검 용도)
  */
 export enum SiteAuditType {
   REGULAR = 0,        // 정기점검
@@ -82,45 +81,48 @@ export const SiteAuditTypeLabels: Record<SiteAuditType, string> = {
 }
 
 /**
- * 조직 직위/위치 타입
- * TODO: 백엔드 API 스펙 확정 필요
+ * 조직 직위 타입
+ * 백엔드: Profile.is_level, OrganizationChart.position
+ * 주의: 0=일반(해당없음), 5=경영책임자 순서임
  */
 export enum OrganizationPosition {
-  CEO = 0,                          // 경영책임자
+  NOT_APPLICABLE = 0,               // 일반(해당없음)
   SAFETY_MANAGER = 1,               // 안전보건관리책임자
   SAFETY_OFFICER = 2,               // 안전관리자
   HEALTH_OFFICER = 3,               // 보건관리자
   SUPERVISOR = 4,                   // 관리감독자
-  NOT_APPLICABLE = 5,               // 해당없음
+  CEO = 5,                          // 경영책임자
 }
 
 export const OrganizationPositionLabels: Record<OrganizationPosition, string> = {
-  [OrganizationPosition.CEO]: '경영책임자',
+  [OrganizationPosition.NOT_APPLICABLE]: '일반(해당없음)',
   [OrganizationPosition.SAFETY_MANAGER]: '안전보건관리책임자',
   [OrganizationPosition.SAFETY_OFFICER]: '안전관리자',
   [OrganizationPosition.HEALTH_OFFICER]: '보건관리자',
   [OrganizationPosition.SUPERVISOR]: '관리감독자',
-  [OrganizationPosition.NOT_APPLICABLE]: '해당없음',
+  [OrganizationPosition.CEO]: '경영책임자',
 }
 
 /**
  * 사용자 레벨
- * 백엔드 is_level 필드 매핑
+ * 백엔드: Profile.is_level 필드 매핑
  */
 export enum UserLevel {
-  ADMIN = 0,              // 관리자
-  MANAGER = 1,            // 매니저
-  SUPERVISOR = 2,         // 감독자
-  WORKER = 3,             // 작업자
-  GUEST = 4,              // 게스트
+  GENERAL = 0,                      // 일반(해당없음)
+  SAFETY_HEALTH_MANAGER = 1,        // 안전보건관리책임자
+  SAFETY_MANAGER = 2,               // 안전관리자
+  HEALTH_MANAGER = 3,               // 보건관리자
+  SUPERVISOR = 4,                   // 관리감독자
+  CEO = 5,                          // 경영책임자
 }
 
 export const UserLevelLabels: Record<UserLevel, string> = {
-  [UserLevel.ADMIN]: '관리자',
-  [UserLevel.MANAGER]: '매니저',
-  [UserLevel.SUPERVISOR]: '감독자',
-  [UserLevel.WORKER]: '작업자',
-  [UserLevel.GUEST]: '게스트',
+  [UserLevel.GENERAL]: '일반(해당없음)',
+  [UserLevel.SAFETY_HEALTH_MANAGER]: '안전보건관리책임자',
+  [UserLevel.SAFETY_MANAGER]: '안전관리자',
+  [UserLevel.HEALTH_MANAGER]: '보건관리자',
+  [UserLevel.SUPERVISOR]: '관리감독자',
+  [UserLevel.CEO]: '경영책임자',
 }
 
 /**

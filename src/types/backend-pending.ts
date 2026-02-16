@@ -89,16 +89,26 @@ export interface SiteAuditExtended {
   location: string
 
   /**
-   * TODO: 백엔드 type 매핑 확인 필요
+   * 점검 종류 (숫자)
    * 0=정기점검, 1=수시점검, 2=특별점검, 3=합동점검, 4=기타
    */
   type: number
 
   /**
-   * TODO: 백엔드 result 매핑 확인 필요
-   * 0=양호, 1=불량, 2=개선필요, 3=해당없음
+   * 점검 종류 (문자열) - 백엔드에서 매핑 제공
+   */
+  type_name?: string
+
+  /**
+   * 점검 결과 (숫자)
+   * 0=이상없음, 1=주의, 2=위험
    */
   result: number
+
+  /**
+   * 점검 결과 (문자열) - 백엔드에서 매핑 제공
+   */
+  result_name?: string
 }
 
 /**
@@ -113,20 +123,27 @@ export interface OrganizationStaffExtended {
   email: string
 
   /**
-   * TODO: 백엔드 position 매핑 확인 필요
-   * 0: 경영책임자
+   * 안전직위 (숫자) - 백엔드 Profile.is_level 확정
+   * 0: 일반(해당없음)
    * 1: 안전보건관리책임자
    * 2: 안전관리자
    * 3: 보건관리자
    * 4: 관리감독자
-   * 5: 해당없음 (?)
+   * 5: 경영책임자
    */
   position: number
 
   /**
-   * TODO: 백엔드 선임신고서 파일 필드 추가 대기
+   * 안전직위 (문자열) - 백엔드에서 매핑 제공
    */
-  appointment_certificate?: string  // 선임신고서 파일
+  position_name?: string
+
+  /**
+   * 선임신고서 파일 URL
+   * NOTE: DB에 필드 없음 - 추가하려면 ALTER TABLE 필요
+   * ALTER TABLE posts_organizationchart ADD COLUMN appointment_certificate VARCHAR(255);
+   */
+  appointment_certificate?: string
 }
 
 /**
@@ -141,12 +158,7 @@ export interface EducationExtended {
   instructor: string
   attendee_count: number
 
-  /**
-   * TODO: 백엔드 오탈자 수정 필요
-   * rist_title → risk_title로 변경되어야 함
-   */
-  rist_title?: string  // 위험성평가 제목 (오탈자)
-  risk_title?: string  // 위험성평가 제목 (정상)
+  risk_title?: string  // 위험성평가 제목
 }
 
 /**
@@ -155,15 +167,15 @@ export interface EducationExtended {
  */
 export interface OrganizationImageExtended {
   /**
-   * TODO: 조직도 이미지 조회 API 필요
-   * 현재는 업로드만 가능하고 조회가 불가능
+   * 조직도 이미지 URL
+   * GET /posts/organization_list/ 응답의 'image' 필드에서 제공됨
    */
   organization_image_url?: string
 }
 
 /**
  * 날씨 정보
- * 백엔드 미작업 (⚪️)
+ * 백엔드 구현 완료: GET /info/weather/
  */
 export interface WeatherInfo {
   temperature?: number
@@ -174,7 +186,7 @@ export interface WeatherInfo {
 
 /**
  * 배너 정보
- * 백엔드 미작업 (⚪️)
+ * 백엔드 구현 완료: GET /info/banners/
  */
 export interface BannerInfo {
   id?: number
@@ -185,13 +197,15 @@ export interface BannerInfo {
 
 /**
  * 알림 전송 요청
- * 백엔드 미작업 (⚪️)
+ * 백엔드 구현 완료: POST /api/notifications/send/
+ * FCM 앱 푸시 방식 채택 (api/15_Notification/notification.api.ts 참조)
  */
 export interface NotificationSendRequest {
-  method: 'kakao' | 'app'        // 알림 방식
-  recipients: string[]            // 수신자 ID 배열
-  message?: string                // 메시지 내용
-  type: 'education' | 'meeting' | 'inspection'  // 알림 타입
+  title: string
+  contents: string
+  category: number                // Alarm.category (0=TBM, 4=교육 등)
+  user_ids?: number[]             // 수신자 user_id 배열
+  phones?: string[]               // 수신자 전화번호 배열 (user_ids 대안)
 }
 
 /**
